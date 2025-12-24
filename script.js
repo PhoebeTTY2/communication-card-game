@@ -3,11 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
 /* =====================
    CONFIG
 ===================== */
-const PREVIEW_TIME = 20000;
-const GAME_TIME = 600;
+const PREVIEW_TIME = 20000; // 20 seconds
+const GAME_TIME = 600; // 10 minutes
 
 /* =====================
-   SOUND
+   SOUND (MOBILE SAFE)
 ===================== */
 const bgm = new Audio("bgm.mp3");
 bgm.loop = true;
@@ -17,12 +17,6 @@ const soundCorrect = new Audio("correct.mp3");
 const soundWrong = new Audio("wrong.mp3");
 
 let soundStarted = false;
-function startSound() {
-  if (!soundStarted) {
-    bgm.play().catch(()=>{});
-    soundStarted = true;
-  }
-}
 
 /* =====================
    CARDS
@@ -33,7 +27,8 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 /* =====================
    QUESTIONS
 ===================== */
-  const questionsBase = [
+const questionsBase = [
+   const questionsBase = [
 
 /* ===== BASIC COMMUNICATION (1–60) ===== */
 
@@ -105,6 +100,7 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 {q:"Why is communication vital in healthcare?",o:["Miscommunication can mean life or death","Replaces diagnosis","Discourages respect","Avoids treatment"],a:0}
 
 ];
+];
 
 let questionQueue = [];
 function shuffleQuestions() {
@@ -121,6 +117,7 @@ const qText = document.getElementById("qText");
 const choices = document.getElementById("choices");
 const playersEl = document.querySelectorAll(".player");
 const instruction = document.getElementById("instruction");
+const replayBtn = document.getElementById("replayBtn");
 
 /* =====================
    GAME STATE
@@ -157,18 +154,19 @@ cardsData.forEach(emoji => {
   card.className = "card";
   card.textContent = emoji;
 
-  card.addEventListener("click", onCardClick.bind(null, card));
-
+  card.addEventListener("click", () => onCardClick(card));
 
   board.appendChild(card);
 });
 
 /* =====================
-   PREVIEW
+   PREVIEW MODE
 ===================== */
 instruction.textContent = "👀 Memorize the cards! (20 seconds)";
+
 setTimeout(() => {
   document.querySelectorAll(".card").forEach(c => c.classList.add("closed"));
+  instruction.textContent = "🎮 Game Started!";
   gameStarted = true;
   startTimer();
 }, PREVIEW_TIME);
@@ -177,7 +175,13 @@ setTimeout(() => {
    GAMEPLAY
 ===================== */
 function onCardClick(card) {
-  startSound();
+
+  /* 🔊 START BGM (MOBILE SAFE) */
+  if (!soundStarted) {
+    bgm.play().catch(()=>{});
+    soundStarted = true;
+  }
+
   if (!gameStarted || gameOver) return;
   if (!card.classList.contains("closed")) return;
   if (!modal.classList.contains("hidden")) return;
@@ -191,6 +195,9 @@ function onCardClick(card) {
   }
 }
 
+/* =====================
+   QUESTION MODAL
+===================== */
 function askQuestion() {
   if (questionQueue.length === 0) shuffleQuestions();
   const q = questionQueue.pop();
@@ -199,48 +206,60 @@ function askQuestion() {
   qText.textContent = q.q;
   choices.innerHTML = "";
 
+  /* 🚫 STOP TAP-THROUGH */
+  modal.style.pointerEvents = "auto";
+  board.style.pointerEvents = "none";
+
   q.o.forEach((opt, i) => {
     const btn = document.createElement("button");
     btn.textContent = opt;
-    btn.dataset.correct = (i === q.a);
     btn.onclick = () => checkAnswer(btn, i === q.a);
     choices.appendChild(btn);
   });
 }
 
 function checkAnswer(button, isCorrect) {
-  const all = document.querySelectorAll("#choices button");
-  all.forEach(b => b.disabled = true);
+  const allButtons = document.querySelectorAll("#choices button");
+  allButtons.forEach(b => b.disabled = true);
 
   if (isCorrect) {
     soundCorrect.play();
     button.classList.add("correct");
+
     firstCard.classList.remove("closed");
     canPickSecond = true;
-    modal.classList.add("hidden");
+
+    closeModal();
   } else {
     soundWrong.play();
     button.classList.add("wrong");
-    all.forEach(b => {
-      if (b.dataset.correct === "true") b.classList.add("correct");
-    });
 
     setTimeout(() => {
-      modal.classList.add("hidden");
+      closeModal();
       resetTurn();
       nextPlayer();
-    }, 1000);
+    }, 800);
   }
 }
 
+function closeModal() {
+  modal.classList.add("hidden");
+  board.style.pointerEvents = "auto";
+}
+
+/* =====================
+   MATCH CHECK
+===================== */
 function resolveCards() {
   secondCard.classList.remove("closed");
 
   if (firstCard.textContent === secondCard.textContent) {
     firstCard.classList.add(`p${currentPlayer}`);
     secondCard.classList.add(`p${currentPlayer}`);
+
     scores[currentPlayer]++;
     playersEl[currentPlayer].querySelector("span").textContent = scores[currentPlayer];
+
     checkAllMatched();
     endTurn();
   } else {
@@ -270,11 +289,17 @@ function nextPlayer() {
 }
 
 function checkAllMatched() {
-  if (document.querySelectorAll(".card.closed").length === 0) endGame();
+  if (document.querySelectorAll(".card.closed").length === 0) {
+    endGame();
+  }
 }
 
+/* =====================
+   END GAME
+===================== */
 function endGame() {
   if (gameOver) return;
+
   gameOver = true;
   clearInterval(timer);
   bgm.pause();
@@ -284,22 +309,14 @@ function endGame() {
     .map((s,i)=> s === max ? `Player ${i+1}` : null)
     .filter(Boolean);
 
-  alert(`🏆 GAME OVER!\nWinner: ${winners.join(", ")}`);
+  alert(`🏆 GAME OVER!\nWinner: ${winners.join(", ")}\nScore: ${max}`);
 }
 
 /* =====================
-   BUTTONS
+   REPLAY
 ===================== */
-document.getElementById("replayBtn").onclick = () => location.reload();
-
-const fsBtn = document.getElementById("fullscreenBtn");
-if (fsBtn) {
-  fsBtn.onclick = () => {
-    const el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen();
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-  };
-}
+replayBtn.onclick = () => location.reload();
 
 });
+
 
