@@ -36,6 +36,7 @@ const instruction = document.getElementById("instruction");
 const playersEl = document.querySelectorAll(".player");
 const replayBtn = document.getElementById("replayBtn");
 const fullscreenBtn = document.getElementById("fullscreenBtn");
+const gameWrapper = document.getElementById("game");
 
 /* =====================
    GAME STATE
@@ -95,7 +96,13 @@ cardsData.forEach(symbol => {
   const card = document.createElement("div");
   card.className = "card";
   card.textContent = symbol;
-  card.onclick = () => handleCard(card);
+
+  card.addEventListener("click", () => handleCard(card));
+  card.addEventListener("touchstart", e => {
+    e.preventDefault();
+    handleCard(card);
+  });
+
   board.appendChild(card);
 });
 
@@ -115,8 +122,10 @@ setTimeout(() => {
 ===================== */
 function handleCard(card) {
   startSoundOnce();
+
   if (!gameStarted || gameOver || inputLocked) return;
   if (!card.classList.contains("closed")) return;
+  if (!modal.classList.contains("hidden")) return;
 
   if (!firstCard) {
     firstCard = card;
@@ -142,7 +151,13 @@ function askQuestion() {
   currentQuestion.o.forEach((opt,i) => {
     const btn = document.createElement("button");
     btn.textContent = opt;
-    btn.onclick = () => checkAnswer(btn,i);
+
+    btn.addEventListener("click", () => checkAnswer(btn,i));
+    btn.addEventListener("touchstart", e => {
+      e.preventDefault();
+      checkAnswer(btn,i);
+    });
+
     choices.appendChild(btn);
   });
 }
@@ -208,7 +223,7 @@ function resolveMatch() {
 }
 
 /* =====================
-   TURN
+   TURN CONTROL
 ===================== */
 function resetTurn() {
   firstCard = null;
@@ -237,17 +252,26 @@ function endGame() {
   gameOver = true;
   clearInterval(timer);
   bgm.pause();
-  alert("🏆 GAME OVER!");
+
+  const max = Math.max(...scores);
+  const winners = scores
+    .map((s,i) => s === max ? `Player ${i+1}` : null)
+    .filter(Boolean);
+
+  alert(`🏆 GAME OVER!\nWinner: ${winners.join(", ")}\nScore: ${max}`);
 }
 
 /* =====================
    BUTTONS
 ===================== */
 replayBtn.onclick = () => location.reload();
+
 fullscreenBtn.onclick = () => {
   if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen().catch(()=>{});
-  } else document.exitFullscreen();
+    gameWrapper.requestFullscreen().catch(()=>{});
+  } else {
+    document.exitFullscreen();
+  }
 };
 
 });
