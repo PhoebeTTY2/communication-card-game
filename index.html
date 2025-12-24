@@ -1,36 +1,33 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Communication Memory Game</title>
-
-  <!-- ✅ MOBILE VIEWPORT -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+  <title>Pixel Memory Quest</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>🧠 Communication Card Matching Game</h1>
-
+<h1>🎮 Pixel Memory Quest</h1>
 <p id="instruction">👀 Memorize the cards! (20 seconds)</p>
 
 <div id="players">
-  <div class="player active">🟥 P1: <span>0</span></div>
-  <div class="player">🟦 P2: <span>0</span></div>
-  <div class="player">🟩 P3: <span>0</span></div>
-  <div class="player">🟨 P4: <span>0</span></div>
+  <div class="player p0 active">🟥 Player 1: <span>0</span></div>
+  <div class="player p1">🟦 Player 2: <span>0</span></div>
+  <div class="player p2">🟩 Player 3: <span>0</span></div>
+  <div class="player p3">🟨 Player 4: <span>0</span></div>
 </div>
 
 <div id="board"></div>
 
-<button id="replayBtn">🔁 Replay</button>
-
-<!-- QUESTION MODAL -->
-<div id="questionModal" class="hidden">
-  <p id="qText"></p>
-  <div id="choices"></div>
+<div id="questionModal" class="modal hidden">
+  <div class="modal-box">
+    <h3 id="qText"></h3>
+    <div id="choices"></div>
+  </div>
 </div>
+
+<button id="replayBtn">🔄 Replay</button>
 
 <script src="script.js"></script>
 </body>

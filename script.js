@@ -1,10 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-/* ========= CONFIG ========= */
-const PREVIEW_TIME = 20000;
-const GAME_TIME = 600;
+/* =====================
+   CONFIG
+===================== */
+const PREVIEW_TIME = 20000; // 20 seconds
+const GAME_TIME = 600; // 10 minutes
 
-/* ========= SOUND ========= */
+/* =====================
+   SOUND
+===================== */
 const bgm = new Audio("bgm.mp3");
 bgm.loop = true;
 bgm.volume = 0.3;
@@ -20,13 +24,17 @@ function startSound() {
   }
 }
 
-/* ========= CARDS ========= */
+/* =====================
+   CARDS
+===================== */
 const emojis = ["🍎","🍌","🍓","🍇","🍉","🍒","🥝","🍍","🥑","🌽","🥕","🍄","🧁","🍩","🍪"];
 const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 
-/* ========= QUESTIONS ========= */
+/* =====================
+   QUESTIONS
+===================== */
 /* 🔴 PASTE YOUR FULL 160 QUESTIONS HERE 🔴 */
-const questionsBase = [  const questionsBase = [
+  const questionsBase = [
 
 /* ===== BASIC COMMUNICATION (1–60) ===== */
 
@@ -98,17 +106,15 @@ const questionsBase = [  const questionsBase = [
 {q:"Why is communication vital in healthcare?",o:["Miscommunication can mean life or death","Replaces diagnosis","Discourages respect","Avoids treatment"],a:0}
 
 ];
-  // {q:"Question?", o:["A","B","C","D"], a:0},
-];
-
-/* ========= SHUFFLE QUESTIONS ========= */
 let questionQueue = [];
 function shuffleQuestions() {
   questionQueue = [...questionsBase].sort(() => Math.random() - 0.5);
 }
 shuffleQuestions();
 
-/* ========= ELEMENTS ========= */
+/* =====================
+   ELEMENTS
+===================== */
 const board = document.getElementById("board");
 const modal = document.getElementById("questionModal");
 const qText = document.getElementById("qText");
@@ -116,7 +122,9 @@ const choices = document.getElementById("choices");
 const playersEl = document.querySelectorAll(".player");
 const instruction = document.getElementById("instruction");
 
-/* ========= GAME STATE ========= */
+/* =====================
+   GAME STATE
+===================== */
 let scores = [0,0,0,0];
 let currentPlayer = 0;
 let firstCard = null;
@@ -125,7 +133,9 @@ let canPickSecond = false;
 let gameStarted = false;
 let gameOver = false;
 
-/* ========= TIMER ========= */
+/* =====================
+   TIMER
+===================== */
 let timeLeft = GAME_TIME;
 let timer = null;
 
@@ -139,19 +149,21 @@ function startTimer() {
   }, 1000);
 }
 
-/* ========= CREATE BOARD ========= */
+/* =====================
+   CREATE BOARD
+===================== */
 cardsData.forEach(emoji => {
   const card = document.createElement("div");
   card.className = "card";
   card.textContent = emoji;
-
-  card.addEventListener("click", () => onCardClick(card));
-  card.addEventListener("touchstart", () => onCardClick(card));
-
+  card.onclick = () => onCardClick(card);
   board.appendChild(card);
 });
 
-/* ========= PREVIEW ========= */
+/* =====================
+   PREVIEW
+===================== */
+instruction.textContent = "👀 Memorize the cards! (20 seconds)";
 setTimeout(() => {
   document.querySelectorAll(".card").forEach(c => c.classList.add("closed"));
   instruction.textContent = "🎮 Game Started!";
@@ -159,7 +171,9 @@ setTimeout(() => {
   startTimer();
 }, PREVIEW_TIME);
 
-/* ========= GAMEPLAY ========= */
+/* =====================
+   GAMEPLAY
+===================== */
 function onCardClick(card) {
   startSound();
   if (!gameStarted || gameOver) return;
@@ -193,8 +207,8 @@ function askQuestion() {
 }
 
 function checkAnswer(button, isCorrect) {
-  const buttons = document.querySelectorAll("#choices button");
-  buttons.forEach(b => b.disabled = true);
+  const allButtons = document.querySelectorAll("#choices button");
+  allButtons.forEach(b => b.disabled = true);
 
   if (isCorrect) {
     soundCorrect.play();
@@ -205,9 +219,13 @@ function checkAnswer(button, isCorrect) {
   } else {
     soundWrong.play();
     button.classList.add("wrong");
-    buttons.forEach(b => {
-      if (b.dataset.correct === "true") b.classList.add("correct");
+
+    allButtons.forEach(b => {
+      if (b.dataset.correct === "true") {
+        b.classList.add("correct");
+      }
     });
+
     setTimeout(() => {
       modal.classList.add("hidden");
       resetTurn();
@@ -273,3 +291,4 @@ function endGame() {
 document.getElementById("replayBtn").onclick = () => location.reload();
 
 });
+
