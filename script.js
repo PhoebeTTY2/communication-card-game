@@ -157,8 +157,8 @@ cardsData.forEach(emoji => {
   card.className = "card";
   card.textContent = emoji;
 
-  card.addEventListener("click", () => onCardClick(card));
-  card.addEventListener("touchstart", () => onCardClick(card));
+  card.addEventListener("click", onCardClick.bind(null, card));
+
 
   board.appendChild(card);
 });
