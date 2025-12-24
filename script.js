@@ -3,8 +3,8 @@ document.addEventListener("DOMContentLoaded", () => {
 /* =====================
    CONFIG
 ===================== */
-const PREVIEW_TIME = 20000; // 20 seconds
-const GAME_TIME = 600; // 10 minutes
+const PREVIEW_TIME = 20000;
+const GAME_TIME = 600;
 
 /* =====================
    SOUND
@@ -33,7 +33,6 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 /* =====================
    QUESTIONS
 ===================== */
-/* 🔴 PASTE YOUR FULL 160 QUESTIONS HERE 🔴 */
   const questionsBase = [
 
 /* ===== BASIC COMMUNICATION (1–60) ===== */
@@ -106,6 +105,7 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 {q:"Why is communication vital in healthcare?",o:["Miscommunication can mean life or death","Replaces diagnosis","Discourages respect","Avoids treatment"],a:0}
 
 ];
+
 let questionQueue = [];
 function shuffleQuestions() {
   questionQueue = [...questionsBase].sort(() => Math.random() - 0.5);
@@ -156,7 +156,10 @@ cardsData.forEach(emoji => {
   const card = document.createElement("div");
   card.className = "card";
   card.textContent = emoji;
-  card.onclick = () => onCardClick(card);
+
+  card.addEventListener("click", () => onCardClick(card));
+  card.addEventListener("touchstart", () => onCardClick(card));
+
   board.appendChild(card);
 });
 
@@ -166,7 +169,6 @@ cardsData.forEach(emoji => {
 instruction.textContent = "👀 Memorize the cards! (20 seconds)";
 setTimeout(() => {
   document.querySelectorAll(".card").forEach(c => c.classList.add("closed"));
-  instruction.textContent = "🎮 Game Started!";
   gameStarted = true;
   startTimer();
 }, PREVIEW_TIME);
@@ -207,8 +209,8 @@ function askQuestion() {
 }
 
 function checkAnswer(button, isCorrect) {
-  const allButtons = document.querySelectorAll("#choices button");
-  allButtons.forEach(b => b.disabled = true);
+  const all = document.querySelectorAll("#choices button");
+  all.forEach(b => b.disabled = true);
 
   if (isCorrect) {
     soundCorrect.play();
@@ -219,11 +221,8 @@ function checkAnswer(button, isCorrect) {
   } else {
     soundWrong.play();
     button.classList.add("wrong");
-
-    allButtons.forEach(b => {
-      if (b.dataset.correct === "true") {
-        b.classList.add("correct");
-      }
+    all.forEach(b => {
+      if (b.dataset.correct === "true") b.classList.add("correct");
     });
 
     setTimeout(() => {
@@ -285,10 +284,22 @@ function endGame() {
     .map((s,i)=> s === max ? `Player ${i+1}` : null)
     .filter(Boolean);
 
-  alert(`🏆 GAME OVER!\nWinner: ${winners.join(", ")}\nScore: ${max}`);
+  alert(`🏆 GAME OVER!\nWinner: ${winners.join(", ")}`);
 }
 
+/* =====================
+   BUTTONS
+===================== */
 document.getElementById("replayBtn").onclick = () => location.reload();
+
+const fsBtn = document.getElementById("fullscreenBtn");
+if (fsBtn) {
+  fsBtn.onclick = () => {
+    const el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  };
+}
 
 });
 
