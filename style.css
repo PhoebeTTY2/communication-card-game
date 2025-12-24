@@ -236,3 +236,70 @@ body {
   }
 }
 
+/* =========================
+   SMALL PHONE FULLSCREEN FIX
+   (REAL MOBILE SIZE)
+========================= */
+@media (max-width: 480px) {
+
+  body {
+    padding: 2px;
+    font-size: 10px;
+  }
+
+  h1 {
+    font-size: 12px;
+    margin: 4px 0;
+  }
+
+  #instruction {
+    font-size: 9px;
+    margin: 2px 0;
+  }
+
+  #players {
+    font-size: 8px;
+    margin: 4px 0;
+  }
+
+  .player {
+    padding: 4px;
+    margin: 2px;
+    border-width: 2px;
+  }
+
+  #board {
+    grid-template-columns: repeat(5, 48px);
+    gap: 5px;
+    padding: 6px;
+    border-width: 4px;
+  }
+
+  .card {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+    border-width: 3px;
+  }
+
+  .modal-box {
+    width: 96%;
+    padding: 10px;
+    font-size: 9px;
+  }
+
+  #choices button {
+    font-size: 9px;
+    padding: 6px;
+    margin: 6px auto;
+  }
+
+  #replayBtn,
+  #fullscreenBtn {
+    font-size: 9px;
+    padding: 6px 8px;
+    bottom: 8px;
+    right: 8px;
+  }
+}
+
