@@ -184,3 +184,55 @@ body {
   }
 }
 
+/* =========================
+   MOBILE FULLSCREEN FIX
+========================= */
+@media (max-width: 768px) {
+
+  body {
+    padding: 5px;
+  }
+
+  h1 {
+    font-size: 14px;
+    margin: 6px 0;
+  }
+
+  #instruction {
+    font-size: 10px;
+    margin: 4px 0;
+  }
+
+  #players {
+    font-size: 9px;
+  }
+
+  #board {
+    grid-template-columns: repeat(5, 56px);
+    gap: 6px;
+    padding: 8px;
+  }
+
+  .card {
+    width: 56px;
+    height: 56px;
+    font-size: 22px;
+  }
+
+  .modal-box {
+    width: 92%;
+    font-size: 10px;
+  }
+
+  #choices button {
+    font-size: 9px;
+    padding: 6px;
+  }
+
+  #replayBtn,
+  #fullscreenBtn {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+}
+
