@@ -77,59 +77,56 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 {q:"Which type of communication occurs within oneself?",o:["Interpersonal","Intrapersonal","Mass","Public"],a:1},
 {q:"Which type of communication involves two or more people?",o:["Intrapersonal","Interpersonal","Mass","Non-verbal"],a:1},
 {q:"Which type of communication addresses a large audience?",o:["Public communication","Small group","Intrapersonal","Non-verbal"],a:0},
-{q:"Which communication involves group decision-making?",o:["Small group communication","Mass communication","Public communication","Non-verbal"],a:0},
+{q:"Which communication involves group decision-making?",o:["Mass communication","Small group communication","Public communication","Non-verbal"],a:1},
 {q:"Which communication involves newspapers, TV and radio?",o:["Mass communication","Interpersonal","Intrapersonal","Public"],a:0},
-{q:"Which non-verbal category studies body movement?",o:["Kinesics","Proxemics","Oculesics","Vocalics"],a:0},
-{q:"Which non-verbal category studies space and distance?",o:["Proxemics","Kinesics","Vocalics","Artifactuals"],a:0},
-{q:"Which non-verbal category studies eye contact?",o:["Oculesics","Proxemics","Vocalics","Haptics"],a:0},
-{q:"Which non-verbal category involves touch?",o:["Haptics","Vocalics","Kinesics","Artifactuals"],a:0},
-{q:"Which non-verbal category involves voice qualities?",o:["Vocalics","Proxemics","Oculesics","Artifactuals"],a:0},
-{q:"Which non-verbal category involves clothing and accessories?",o:["Artifactuals","Vocalics","Proxemics","Haptics"],a:0},
+{q:"Which non-verbal category studies body movement?",o:["Proxemics","Oculesics","Vocalics","Kinesics"],a:3},
+{q:"Which non-verbal category studies space and distance?",o:["Kinesics","Proxemics","Vocalics","Artifactuals"],a:1},
+{q:"Which non-verbal category studies eye contact?",o:["Proxemics","Vocalics","Oculesics","Haptics"],a:2},
+{q:"Which non-verbal category involves touch?",o:["Haptics","Vocalics","Kinesics","Artifactuals"],a:1},
+{q:"Which non-verbal category involves voice qualities?",o:["Proxemics","Vocalics","Oculesics","Artifactuals"],a:0},
+{q:"Which non-verbal category involves clothing and accessories?",o:["Vocalics","Proxemics","Haptics","Artifactuals",],a:3},
 
 /* ===== COMMUNICATION BARRIERS (61–110) ===== */
 
-{q:"Which barrier involves noise and distance?",o:["Physical","Psychological","Cultural","Emotional"],a:0},
-{q:"Which barrier involves eyesight or hearing difficulties?",o:["Physiological","Cultural","Emotional","Attitudinal"],a:0},
-{q:"Which barrier involves anger and stress?",o:["Psychological","Physical","Cultural","Systematic"],a:0},
+{q:"Which barrier involves noise and distance?",o:["Psychological","Cultural","Emotional","Physical"],a:3},
+{q:"Which barrier involves eyesight or hearing difficulties?",o:["Cultural","Emotional","Physiological","Attitudinal"],a:2},
+{q:"Which barrier involves anger and stress?",o:["Physical","Psychological","Cultural","Systematic"],a:1},
 {q:"Which barrier involves stereotypes and cultural background?",o:["Cultural","Emotional","Attitudinal","Language"],a:0},
-{q:"Which barrier involves fear and anxiety?",o:["Emotional","Physical","Cultural","Systematic"],a:0},
-{q:"Which barrier involves personality conflicts?",o:["Attitudinal","Emotional","Cultural","Language"],a:0},
-{q:"Which barrier involves false assumptions?",o:["Expectations and prejudices","Systematic","Language","Emotional"],a:0},
+{q:"Which barrier involves fear and anxiety?",o:["Physical","Cultural","Systematic","Emotional"],a:3},
+{q:"Which barrier involves personality conflicts?",o:["Emotional","Cultural","Attitudinal","Language"],a:2},
+{q:"Which barrier involves false assumptions?",o:["Systematic","Expectations and prejudices","Language","Emotional"],a:1},
 {q:"Which barrier involves lack of role clarity in organizations?",o:["Systematic","Attitudinal","Cultural","Language"],a:0},
-{q:"Which barrier involves slang and jargon?",o:["Language","Emotional","Attitudinal","Cultural"],a:0},
-{q:"Which barrier involves too much information?",o:["Information overload","Language","Physical","Psychological"],a:0},
-{q:"Which barrier involves resistance to change?",o:["Attitudinal","Emotional","Cultural","Language"],a:0},
-{q:"Which barrier involves taboo topics?",o:["Cultural","Emotional","Attitudinal","Language"],a:0},
-{q:"Which barrier involves poor management?",o:["Attitudinal","Emotional","Cultural","Language"],a:0},
+{q:"Which barrier involves slang and jargon?",o:["Emotional","Attitudinal","Cultural","Language"],a:3},
+{q:"Which barrier involves taboo topics?",o:["Emotional","Attitudinal","Cultural","Language"],a:2},
+{q:"Which barrier involves poor management?",o:["Emotional","Attitudinal","Cultural","Language"],a:1},
 {q:"Which barrier involves miscommunication in organizations?",o:["Systematic","Emotional","Attitudinal","Language"],a:0},
-{q:"Which barrier involves similar-sounding words?",o:["Language","Emotional","Attitudinal","Cultural"],a:0},
-{q:"Which barrier involves abbreviations?",o:["Language","Emotional","Attitudinal","Cultural"],a:0},
-{q:"Which barrier involves stress?",o:["Psychological","Emotional","Attitudinal","Cultural"],a:0},
+{q:"Which barrier involves similar-sounding words?",o:["Emotional","Attitudinal","Language","Cultural"],a:2},
+{q:"Which barrier involves abbreviations?",o:["Emotional","Attitudinal","Cultural","Language"],a:0},
+{q:"Which barrier involves stress?",o:["Emotional","Psychological","Attitudinal","Cultural"],a:1},
 {q:"Which barrier involves low self-esteem?",o:["Psychological","Emotional","Attitudinal","Cultural"],a:0},
-{q:"Which barrier involves pain?",o:["Physiological","Emotional","Attitudinal","Cultural"],a:0},
-{q:"Which barrier involves hearing difficulties?",o:["Physiological","Emotional","Attitudinal","Cultural"],a:0},
+{q:"Which barrier involves pain?",o:["Emotional","Attitudinal","Cultural","Physiological"],a:3},
+{q:"Which barrier involves hearing difficulties?",o:["Emotional","Attitudinal","Physiological","Cultural"],a:2},
 
 /* ===== HEALTHCARE & AGE GROUP COMMUNICATION (111–160) ===== */
 
-{q:"Why must healthcare providers avoid assumptions?",o:["Each patient is unique","Patients are identical","Patients always understand","Communication is unnecessary"],a:0},
+{q:"Why must healthcare providers avoid assumptions?",o:["Patients are identical","Each patient is unique","Patients always understand","Communication is unnecessary"],a:1},
 {q:"Why is observation important in patient communication?",o:["Helps assess patient condition","Replaces diagnosis","Avoids treatment","Eliminates respect"],a:0},
-{q:"Why must older adults receive simple instructions?",o:["Slower responses","Refuse treatment","Dislike communication","Prefer silence"],a:0},
-{q:"Why should instructions be given one at a time to older adults?",o:["Avoid overwhelming them","Speed treatment","Reduce respect","Increase confusion"],a:0},
+{q:"Why must older adults receive simple instructions?",o:["Refuse treatment","Dislike communication","Slower responses","Prefer silence"],a:2},
 {q:"Why is attentive listening important with children?",o:["Promotes security","Replaces speech","Avoids diagnosis","Discourages cooperation"],a:0},
-{q:"Why should toddlers be communicated with at eye level?",o:["Show calmness","Intimidate them","Confuse them","Discourage them"],a:0},
-{q:"Why should negative sentences be avoided with children?",o:["Increase fear","Promote honesty","Encourage cooperation","Reduce respect"],a:0},
+{q:"Why should toddlers be communicated with at eye level?",o:["Intimidate them","Confuse them","Discourage them","Show calmness"],a:3},
+{q:"Why should negative sentences be avoided with children?",o:["Promote honesty","Increase fear","Encourage cooperation","Reduce respect"],a:1},
 {q:"Why should demonstrations be used with children?",o:["More effective than verbal instruction","Confuse children","Discourage cooperation","Replace respect"],a:0},
-{q:"Why should praise be used with children?",o:["Encourages cooperation","Discourages effort","Replaces respect","Confuses them"],a:0},
+{q:"Why should praise be used with children?",o:["Discourages effort","Encourages cooperation","Replaces respect","Confuses them"],a:1},
 {q:"Why should teenagers be given privacy?",o:["Respect modesty","Dislike respect","Avoid communication","Prefer silence"],a:0},
-{q:"Why is an interpreter important in foreign language communication?",o:["Ensure understanding","Avoid respect","Confuse patients","Replace diagnosis"],a:0},
+{q:"Why is an interpreter important in foreign language communication?",o:["Avoid respect","Confuse patients","Replace diagnosis","Ensure understanding"],a:3},
 {q:"Why should providers look directly at patients when using interpreters?",o:["Show respect","Intimidate","Confuse","Avoid communication"],a:0},
-{q:"Why should providers speak clearly to hearing-impaired patients?",o:["Ensure understanding","Confuse them","Discourage them","Replace respect"],a:0},
-{q:"Why should providers avoid shouting at hearing-impaired patients?",o:["Shouting distorts speech","Shows respect","Is effective","Avoids diagnosis"],a:0},
+{q:"Why should providers speak clearly to hearing-impaired patients?",o:["Confuse them","Discourage them","Ensure understanding","Replace respect"],a:2},
+{q:"Why should providers avoid shouting at hearing-impaired patients?",o:["Shows respect","Shouting distorts speech","Is effective","Avoids diagnosis"],a:1},
 {q:"Why should noisy backgrounds be avoided for hearing-impaired patients?",o:["Interfere with understanding","Promote respect","Encourage communication","Replace diagnosis"],a:0},
-{q:"Why is a certified interpreter essential for deaf patients?",o:["Ensure accurate communication","Confuse them","Discourage them","Replace respect"],a:0},
+{q:"Why is a certified interpreter essential for deaf patients?",o:["Confuse them","Discourage them","Replace respect","Ensure accurate communication"],a:3},
 {q:"Why should written communication be used with deaf patients?",o:["Provides clarity","Confuses them","Discourages them","Replaces respect"],a:0},
-{q:"Why should clear verbal instructions be given to visually impaired patients?",o:["Ensure understanding","Confuse them","Discourage them","Replace respect"],a:0},
-{q:"Why is communication vital in healthcare?",o:["Miscommunication can mean life or death","Replaces diagnosis","Discourages respect","Avoids treatment"],a:0}
+{q:"Why should clear verbal instructions be given to visually impaired patients?",o:["Confuse them","Discourage them","Ensure understanding","Replace respect"],a:2},
+{q:"Why is communication vital in healthcare?",o:["Replaces diagnosis","Discourages respect","Avoids treatment","Miscommunication can mean life or death"],a:3}
 ];
 
 let questionQueue = [];
@@ -270,7 +267,13 @@ function endGame() {
   gameOver = true;
   clearInterval(timer);
   bgm.pause();
-  alert("🏆 GAME OVER!");
+
+   const max = Math.max(...scores);
+  const winners = scores
+    .map((s,i)=> s === max ? `Player ${i+1}` : null)
+    .filter(Boolean);
+
+  alert(`🏆 GAME OVER!\nWinner: ${winners.join(", ")}\nScore: ${max}`);
 }
 
 /* BUTTONS */
