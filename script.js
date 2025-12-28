@@ -1,5 +1,43 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+ document.addEventListener("DOMContentLoaded", () => {
+
+  /* SOUND */
+  const bgm = new Audio("bgm.mp3");
+  bgm.loop = true;
+  bgm.volume = 0.3;
+
+  const soundCorrect = new Audio("correct.mp3");
+  const soundWrong = new Audio("wrong.mp3");
+
+  let soundStarted = false;
+  function startSoundOnce() {
+    if (!soundStarted) {
+      bgm.play().catch(()=>{});
+      soundStarted = true;
+    }
+  }
+
+  /* 🔓 MOBILE AUDIO UNLOCK (DO NOT MOVE BELOW THIS) */
+  function unlockAudio() {
+    bgm.play().then(() => {
+      bgm.pause();
+      bgm.currentTime = 0;
+    }).catch(()=>{});
+
+    document.removeEventListener("touchstart", unlockAudio);
+    document.removeEventListener("click", unlockAudio);
+  }
+
+  document.addEventListener("touchstart", unlockAudio, { once: true });
+  document.addEventListener("click", unlockAudio, { once: true });
+
+
+  /* =====================
+     CONFIG
+  ===================== */
+
+
 /* CONFIG */
 const PREVIEW_TIME = 20000;
 const GAME_TIME = 600;
@@ -128,8 +166,8 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 {q:"Why should noisy backgrounds be avoided for hearing-impaired patients?",o:["Interfere with understanding","Promote respect","Encourage communication","Replace diagnosis"],a:0},
 {q:"Why is a certified interpreter essential for deaf patients?",o:["Ensure accurate communication","Confuse them","Discourage them","Replace respect"],a:0},
 {q:"Why should written communication be used with deaf patients?",o:["Provides clarity","Confuses them","Discourages them","Replaces respect"],a:0},
-{q:"Why should clear verbal instructions be given to visually impaired patients?",o:["Ensure understanding","Confuse them","Discourage them","Replace respect"],a:0},
-{q:"Why is communication vital in healthcare?",o:["Miscommunication can mean life or death","Replaces diagnosis","Discourages respect","Avoids treatment"],a:0}
+{q:"Why should clear verbal instructions be given to visually impaired patients?",o:["Confuse them","Discourage them","Replace respect","Ensure understanding"],a:3},
+{q:"Why is communication vital in healthcare?",o:["Replaces diagnosis","Discourages respect","Miscommunication can mean life or death","Avoids treatment"],a:2}
 ];
 
 let questionQueue = [];
@@ -179,10 +217,23 @@ function handleCard(card) {
   }
 }
 
+function shuffleOptions(q) {
+  const correct = q.o[q.a];
+  const shuffled = q.o
+    .map(opt => ({ opt, sort: Math.random() }))
+    .sort((a,b) => a.sort - b.sort)
+    .map(o => o.opt);
+
+  q.o = shuffled;
+  q.a = shuffled.indexOf(correct);
+}
+
+
 /* QUESTION */
 function askQuestion() {
   if (questionQueue.length === 0) shuffleQuestions();
   const q = questionQueue.pop();
+shuffleOptions(q);
 
   inputLocked = true;
   modal.classList.remove("hidden");
@@ -270,8 +321,15 @@ function endGame() {
   gameOver = true;
   clearInterval(timer);
   bgm.pause();
-  alert("🏆 GAME OVER!");
+  
+const max = Math.max(...scores);
+  const winners = scores
+    .map((s,i)=> s === max ? `Player ${i+1}` : null)
+    .filter(Boolean);
+
+  alert(`🏆 GAME OVER!\nWinner: ${winners.join(", ")}\nScore: ${max}`);
 }
+
 
 /* BUTTONS */
 replayBtn.onclick = () => location.reload();
