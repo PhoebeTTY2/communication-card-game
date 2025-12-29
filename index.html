@@ -4,30 +4,61 @@
   <meta charset="UTF-8">
   <title>Pixel Memory Quest</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <style>
+    /* Simple button styling for the music button */
+    #musicBtn {
+      padding: 12px 20px;
+      font-size: 16px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 10px;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+    
+    #musicBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    
+    #musicBtn.active {
+      background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+    }
+    
+    #musicBtn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  </style>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <!-- Audio elements for game sounds (added here) -->
-  <audio id="bgm" loop preload="auto">
+  <!-- Audio elements -->
+  <audio id="bgm" loop>
     <source src="bgm.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
   </audio>
   
-  <audio id="correctSound" preload="auto">
+  <audio id="correctSound">
     <source src="correct.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
   </audio>
   
-  <audio id="wrongSound" preload="auto">
+  <audio id="wrongSound">
     <source src="wrong.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
   </audio>
 
-  <!-- 🔴 IMPORTANT: game wrapper owns background -->
   <div id="game">
     <h1>🎮 Pixel Memory Quest</h1>
     <p id="instruction">👀 Memorize the cards! (20 seconds)</p>
+    
+    <!-- Added music control button -->
+    <button id="musicBtn">🔇 Tap to Enable Sound</button>
 
     <div id="players">
       <div class="player p0 active">🟥 Player 1: <span>0</span></div>
@@ -52,4 +83,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
