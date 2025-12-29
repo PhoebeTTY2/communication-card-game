@@ -1,11 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-/* CONFIG */
-const PREVIEW_TIME = 20000;
-const GAME_TIME = 600;
-const TOTAL_PLAYERS = 4;
 
-/* SOUND */
+/* =====================
+   SOUND (DEFINE ONCE)
+===================== */
 const bgm = new Audio("bgm.mp3");
 bgm.loop = true;
 bgm.volume = 0.3;
@@ -13,13 +11,45 @@ bgm.volume = 0.3;
 const soundCorrect = new Audio("correct.mp3");
 const soundWrong = new Audio("wrong.mp3");
 
+/* =====================
+   MOBILE + DESKTOP AUDIO UNLOCK
+===================== */
+let audioUnlocked = false;
+
+function unlockAudio() {
+  if (audioUnlocked) return;
+
+  bgm.play().then(() => {
+    bgm.pause();
+    bgm.currentTime = 0;
+    audioUnlocked = true;
+  }).catch(()=>{});
+
+  document.removeEventListener("touchstart", unlockAudio);
+  document.removeEventListener("click", unlockAudio);
+}
+
+document.addEventListener("touchstart", unlockAudio, { once: true });
+document.addEventListener("click", unlockAudio, { once: true });
+
+/* =====================
+   START BGM WHEN GAME STARTS
+===================== */
 let soundStarted = false;
 function startSoundOnce() {
-  if (!soundStarted) {
+  if (!soundStarted && audioUnlocked) {
     bgm.play().catch(()=>{});
     soundStarted = true;
   }
 }
+
+
+
+/* CONFIG */
+const PREVIEW_TIME = 20000;
+const GAME_TIME = 600;
+const TOTAL_PLAYERS = 4;
+
 
 /* ELEMENTS */
 const board = document.getElementById("board");
@@ -114,7 +144,6 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 {q:"Why must older adults receive simple instructions?",o:["Refuse treatment","Dislike communication","Slower responses","Prefer silence"],a:2},
 {q:"Why is attentive listening important with children?",o:["Promotes security","Replaces speech","Avoids diagnosis","Discourages cooperation"],a:0},
 {q:"Why should toddlers be communicated with at eye level?",o:["Intimidate them","Confuse them","Discourage them","Show calmness"],a:3},
-{q:"Why should negative sentences be avoided with children?",o:["Promote honesty","Increase fear","Encourage cooperation","Reduce respect"],a:1},
 {q:"Why should demonstrations be used with children?",o:["More effective than verbal instruction","Confuse children","Discourage cooperation","Replace respect"],a:0},
 {q:"Why should praise be used with children?",o:["Discourages effort","Encourages cooperation","Replaces respect","Confuses them"],a:1},
 {q:"Why should teenagers be given privacy?",o:["Respect modesty","Dislike respect","Avoid communication","Prefer silence"],a:0},
