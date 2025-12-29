@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+/* CONFIG */
+const PREVIEW_TIME = 20000;
+const GAME_TIME = 600;
+const TOTAL_PLAYERS = 4;
 
-/* =====================
-   SOUND (DEFINE ONCE)
-===================== */
+/* SOUND */
 const bgm = new Audio("bgm.mp3");
 bgm.loop = true;
 bgm.volume = 0.3;
@@ -11,45 +13,8 @@ bgm.volume = 0.3;
 const soundCorrect = new Audio("correct.mp3");
 const soundWrong = new Audio("wrong.mp3");
 
-/* =====================
-   MOBILE + DESKTOP AUDIO UNLOCK
-===================== */
-let audioUnlocked = false;
-
-function unlockAudio() {
-  if (audioUnlocked) return;
-
-  bgm.play().then(() => {
-    bgm.pause();
-    bgm.currentTime = 0;
-    audioUnlocked = true;
-  }).catch(()=>{});
-
-  document.removeEventListener("touchstart", unlockAudio);
-  document.removeEventListener("click", unlockAudio);
-}
-
-document.addEventListener("touchstart", unlockAudio, { once: true });
-document.addEventListener("click", unlockAudio, { once: true });
-
-/* =====================
-   START BGM WHEN GAME STARTS
-===================== */
-let soundStarted = false;
-function startSoundOnce() {
-  if (!soundStarted && audioUnlocked) {
-    bgm.play().catch(()=>{});
-    soundStarted = true;
-  }
-}
-
-
-
-/* CONFIG */
-const PREVIEW_TIME = 20000;
-const GAME_TIME = 600;
-const TOTAL_PLAYERS = 4;
-
+let soundEnabled = false;
+let audioContextStarted = false;
 
 /* ELEMENTS */
 const board = document.getElementById("board");
@@ -76,6 +41,72 @@ let inputLocked = false;
 let timeLeft = GAME_TIME;
 let timer = null;
 
+/* === SOUND FUNCTIONS === */
+
+// Function to initialize audio (required for mobile)
+async function initAudio() {
+  if (audioContextStarted) return;
+  
+  try {
+    // Create and resume AudioContext (required for iOS)
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (AudioContext) {
+      const audioContext = new AudioContext();
+      await audioContext.resume();
+    }
+    
+    // Pre-load audio files
+    await Promise.all([
+      bgm.load(),
+      soundCorrect.load(),
+      soundWrong.load()
+    ]);
+    
+    audioContextStarted = true;
+    console.log("Audio initialized successfully");
+  } catch (error) {
+    console.warn("Audio initialization failed:", error);
+  }
+}
+
+// Function to start BGM with user interaction
+function startBGM() {
+  if (soundEnabled) return;
+  
+  initAudio().then(() => {
+    bgm.play()
+      .then(() => {
+        soundEnabled = true;
+        console.log("BGM started successfully");
+      })
+      .catch(error => {
+        console.warn("Failed to play BGM:", error);
+        
+        // Fallback: Enable sound on first user interaction
+        const enableOnInteraction = () => {
+          bgm.play().catch(() => {});
+          soundEnabled = true;
+          document.removeEventListener('click', enableOnInteraction);
+          document.removeEventListener('touchstart', enableOnInteraction);
+        };
+        
+        document.addEventListener('click', enableOnInteraction);
+        document.addEventListener('touchstart', enableOnInteraction);
+      });
+  });
+}
+
+// Function to play sound effects
+function playSound(sound) {
+  if (!soundEnabled) return;
+  
+  sound.currentTime = 0;
+  sound.play().catch(error => {
+    console.warn("Could not play sound effect:", error);
+  });
+}
+
+/* TIMER */
 function startTimer() {
   timer = setInterval(() => {
     timeLeft--;
@@ -96,7 +127,7 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 
 {q:"What is the simplest definition of communication?",o:["The process of forgetting information","The ability to memorize facts","The process of transferring information","The act of storing information"],a:2},
 {q:"Which of the following is NOT part of the communication process?",o:["Message","Receiver","Silence without meaning","Sender"],a:2},
-{q:"Which modern tool has greatly influenced today’s communication?",o:["Carrier pigeons","Stone tablets","Smoke signals","Social media"],a:3},
+{q:"Which modern tool has greatly influenced today's communication?",o:["Carrier pigeons","Stone tablets","Smoke signals","Social media"],a:3},
 {q:"Which is the most intimate form of communication today?",o:["Email","Talking face-to-face","Facebook status","Twitter post"],a:1},
 {q:"Which type of communication uses words as its primary medium?",o:["Silent communication","Non-verbal communication","Symbolic communication","Verbal communication"],a:3},
 {q:"Which type of communication relies on gestures and body language?",o:["Non-verbal communication","Digital communication","Verbal communication","Written communication"],a:0},
@@ -144,6 +175,7 @@ const cardsData = [...emojis, ...emojis].sort(() => Math.random() - 0.5);
 {q:"Why must older adults receive simple instructions?",o:["Refuse treatment","Dislike communication","Slower responses","Prefer silence"],a:2},
 {q:"Why is attentive listening important with children?",o:["Promotes security","Replaces speech","Avoids diagnosis","Discourages cooperation"],a:0},
 {q:"Why should toddlers be communicated with at eye level?",o:["Intimidate them","Confuse them","Discourage them","Show calmness"],a:3},
+{q:"Why should negative sentences be avoided with children?",o:["Promote honesty","Increase fear","Encourage cooperation","Reduce respect"],a:1},
 {q:"Why should demonstrations be used with children?",o:["More effective than verbal instruction","Confuse children","Discourage cooperation","Replace respect"],a:0},
 {q:"Why should praise be used with children?",o:["Discourages effort","Encourages cooperation","Replaces respect","Confuses them"],a:1},
 {q:"Why should teenagers be given privacy?",o:["Respect modesty","Dislike respect","Avoid communication","Prefer silence"],a:0},
@@ -191,7 +223,11 @@ setTimeout(() => {
 
 /* CARD CLICK */
 function handleCard(card) {
-  startSoundOnce();
+  // Start BGM on first interaction
+  if (!soundEnabled) {
+    startBGM();
+  }
+  
   if (!gameStarted || gameOver || inputLocked) return;
   if (!card.classList.contains("closed")) return;
   if (!modal.classList.contains("hidden")) return;
@@ -228,7 +264,7 @@ function checkAnswer(button,index,q) {
   document.querySelectorAll("#choices button").forEach(b => b.disabled = true);
 
   if (index === q.a) {
-    soundCorrect.play().catch(()=>{});
+    playSound(soundCorrect);
     button.classList.add("correct");
     firstCard.classList.remove("closed");
     canPickSecond = true;
@@ -238,7 +274,7 @@ function checkAnswer(button,index,q) {
       inputLocked = false;
     }, 300);
   } else {
-    soundWrong.play().catch(()=>{});
+    playSound(soundWrong);
     button.classList.add("wrong");
     document.querySelectorAll("#choices button")[q.a].classList.add("correct");
 
@@ -316,7 +352,12 @@ fullscreenBtn.onclick = () => {
   }
 };
 
+// Also start BGM if user clicks any button
+replayBtn.addEventListener("click", () => {
+  if (!soundEnabled) startBGM();
+});
+fullscreenBtn.addEventListener("click", () => {
+  if (!soundEnabled) startBGM();
 });
 
-
-
+});
